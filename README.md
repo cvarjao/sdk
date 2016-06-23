@@ -1,2 +1,2 @@
-# sdk
+# SDk
 Scripting Development Kit
