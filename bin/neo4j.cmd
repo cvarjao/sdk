@@ -1,8 +1,8 @@
 @setlocal
 @echo off
 call "%~dp0\..\lib\_bootstrap.cmd"
-call "%SDK_HOME%\lib\set-vertx.cmd"
+call "%SDK_HOME%\lib\set-neo4j.cmd"
 
-call %SDK_VERTX_CMD% %*
+call %SDK_NEO4J_CMD% %*
 
 @endlocal

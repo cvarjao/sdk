@@ -1,0 +1,6 @@
+
+///usr/local/bin/curl
+export CURL_CMD='/usr/bin/curl'
+
+///usr/sfw/bin/gtar
+export GTAR_CMD='/usr/bin/gtar'

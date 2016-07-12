@@ -1,0 +1,10 @@
+#!/bin/bash
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd -P "$( dirname "$SOURCE" )" && pwd )/setenv.sh" jdk groovy
+
+export JAVA_HOME="$JDK_HOME"
+
+if [ -f "/usr/xpg4/bin/sh" ]; then
+  exec /usr/xpg4/bin/sh "${GROOVY_HOME}/bin/groovy" "$@"
+else
+  exec "${GROOVY_HOME}/bin/groovy" "$@"
+fi
