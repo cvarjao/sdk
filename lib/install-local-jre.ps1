@@ -40,14 +40,16 @@ $7zaDir="$tmpDir\7za"
 $gnuWin32="$tmpDir\gnuWin32"
 $javaHome="$($(resolve-path "$PSScriptRoot\..").Path)\var\.jre"
 
-write-host "TempDir:$tmpDir"
+#write-host "TempDir:$tmpDir"
 
 New-Item $tmpDir -type directory -force >$null 2>&1
 
 
-
-$url = "http://download.oracle.com/otn-pub/java/jdk/8u92-b14/server-jre-8u92-windows-x64.tar.gz"
-$output = "$tmpDir\server-jre-8u92-windows-x64.tar.gz"
+$javaVersion=$Args[0]
+$tmpFileName=$javaVersion -replace "(?<Major>[^\.]+)\.(?<Minor>[^\.]+)\.(?<Patch>[^_]+)_(?<Update>[^\-]+)\-(?<Build>[^\-]+)",'server-jre-${Minor}u${Update}-windows-x64.tar.gz'
+$url = $javaVersion -replace "(?<Major>[^\.]+)\.(?<Minor>[^\.]+)\.(?<Patch>[^_]+)_(?<Update>[^\-]+)\-(?<Build>[^\-]+)",'http://download.oracle.com/otn-pub/java/jdk/${Minor}u${Update}-${Build}/server-jre-${Minor}u${Update}-windows-x64.tar.gz'
+#$url = "http://download.oracle.com/otn-pub/java/jdk/8u92-b14/server-jre-8u92-windows-x64.tar.gz"
+$output = "${tmpDir}\${tmpFileName}"
 $wc = New-Object System.Net.WebClient
 $wc.Headers.Add([System.Net.HttpRequestHeader]::Cookie, "gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie")
 if(!(Test-Path -Path $output )){
