@@ -17,7 +17,7 @@ powershell -Version 2.0 -ExecutionPolicy Bypass -File "%SDK_HOME%\lib\install-lo
 GOTO Done
 
 :NoPowerShell
-echo PowerShell is required!
+echo PowerShell 2.0+ is required!
 exit /b 0
 
 :Done
