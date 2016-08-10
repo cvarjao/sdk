@@ -1,0 +1,96 @@
+apply plugin: 'distribution'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath group: 'org.apache.commons', name: 'commons-compress', version: '1.12'
+    classpath group: 'commons-io', name: 'commons-io', version: '2.5'
+  }
+}
+
+repositories {
+    mavenLocal()
+    /*
+    maven {
+        url "http://repo.mycompany.com/maven2"
+        credentials {
+            username "$mavenUser"
+            password "$mavenPassword"
+        }
+        authentication {
+            basic(BasicAuthentication)
+        }
+    }
+    */
+}
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Path;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+
+
+def tarDirectory(TarArchiveOutputStream tarOutputStream, File root, File item, String[] excludes){
+  String entryName=root.toPath().relativize(item.toPath()).toString().replace('\\','/')
+  String matchEntryname=entryName;
+  if (!item.isFile()) matchEntryname+='/'
+  
+  for (String exclude:excludes){
+    //println matchEntryname+' - '+exclude+' - '+matchEntryname.matches(exclude)
+    if (matchEntryname.matches(exclude)){
+      return;
+    }
+    
+  }
+  TarArchiveEntry tarEntry = new TarArchiveEntry(item, entryName);
+  if (item.isFile()){
+    tarEntry.setMode(0100600)
+  }else{
+    tarEntry.setMode(040755)
+  }
+  
+  tarOutputStream.putArchiveEntry(tarEntry);
+  if (item.isFile()){
+    IOUtils.copy(new FileInputStream(item), tarOutputStream);
+    tarOutputStream.closeArchiveEntry();
+  }else{
+    tarOutputStream.closeArchiveEntry();
+    File[] children = item.listFiles();
+    if (children != null) {
+        for (File child : children) {
+            tarDirectory(tarOutputStream, root, child, excludes);
+        }
+    }
+  }
+}
+
+task dist << {
+    FileOutputStream fileOutputStream = null;
+    File currentDir=new File(System.getProperty("user.dir")).getAbsoluteFile()
+    
+    try{
+      fileOutputStream = new FileOutputStream(new File('build/dist.tar'));
+      TarArchiveOutputStream tarOutputStream=new TarArchiveOutputStream(fileOutputStream);
+      
+      File[] children = currentDir.listFiles();
+      if (children != null) {
+          for (File child : children) {
+            if (!child.isFile() && !'build'.equals(child.getName())){
+              tarDirectory(tarOutputStream, currentDir, child, (String[])['^usr/lib/.*?', '^var/.*+', '^samples/.*', '^\\..+']);
+            }
+          }
+      }
+      
+    }finally{
+      if (fileOutputStream!=null) fileOutputStream.close();
+    }
+}
