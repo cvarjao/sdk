@@ -1,0 +1,8 @@
+#!/bin/bash -e
+_THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+_SDK_HOME=$(cd "${_THIS_SCRIPT_DIR}" && cd .. && pwd)
+
+source "${_SDK_HOME}/lib/set-sdk_javahome.sh"
+source "${_SDK_HOME}/lib/set-jgit.sh"
+#set -x
+exec "${_SDK_JAVA_HOME}/bin/java" -cp "${JGIT_CLASSPATH}"  "${JGIT_MAIN_CLASS}" "$@"
