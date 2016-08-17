@@ -1,0 +1,9 @@
+#!/bin/bash -e
+_THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+_SDK_HOME=$(cd "${_THIS_SCRIPT_DIR}" && cd .. && pwd)
+_SDK_GIT_REMOTE_URL="$(cat "${_SDK_HOME}/etc/defaults/sdk.git.remote.txt")"
+
+(cd "${_SDK_HOME}"; "${_SDK_HOME}/bin/sdk-jgit" fetch)
+# We need to do it twice. Sometimes the first one fails, and leave stuff behind.
+(cd "${_SDK_HOME}"; "${_SDK_HOME}/bin/sdk-jgit" reset --hard origin/master > /dev/null 2>&1)
+(cd "${_SDK_HOME}"; "${_SDK_HOME}/bin/sdk-jgit" reset --hard origin/master)
