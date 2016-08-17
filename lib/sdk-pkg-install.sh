@@ -15,6 +15,6 @@ fi
 if [[ "${_INSTALL_PKG_NAME}" != '-' ]]; then
   _INSTALL_PKG_HOME="${_INSTALL_ROOT}/${_INSTALL_PKG_NAME}/${_INSTALL_PKG_VERSION}"
   if [ ! -e "${_INSTALL_PKG_HOME}" ]; then
-    "${_SDK_JAVA_HOME}/bin/sdk-jjs" -scripting "${_SDK_HOME}/lib/install-${_INSTALL_PKG_NAME}.js" -- "${_INSTALL_PKG_VERSION}" "${_INSTALL_PKG_HOME}"
+    "${_SDK_JAVA_HOME}/bin/jjs" -scripting "${_SDK_HOME}/lib/install-${_INSTALL_PKG_NAME}.js" -- "${_INSTALL_PKG_VERSION}" "${_INSTALL_PKG_HOME}"
   fi
 fi
