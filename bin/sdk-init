@@ -2,8 +2,8 @@
 _THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 _SDK_HOME=$(cd "${_THIS_SCRIPT_DIR}" && cd .. && pwd)
 
-"${_SDK_HOME}\bin\sdk-jgit" init
-"${_SDK_HOME}\bin\sdk-jgit" remote add origin https://github.com/cvarjao/sdk.git
-"${_SDK_HOME}\bin\sdk-jgit" fetch
-"${_SDK_HOME}\bin\sdk-jgit" reset --hard origin/master > /dev/null 2>&1
-"${_SDK_HOME}\bin\sdk-jgit" reset --hard origin/master
+"${_SDK_HOME}/bin/sdk-jgit" init
+"${_SDK_HOME}/bin/sdk-jgit" remote add origin https://github.com/cvarjao/sdk.git
+"${_SDK_HOME}/bin/sdk-jgit" fetch
+"${_SDK_HOME}/bin/sdk-jgit" reset --hard origin/master > /dev/null 2>&1
+"${_SDK_HOME}/bin/sdk-jgit" reset --hard origin/master
