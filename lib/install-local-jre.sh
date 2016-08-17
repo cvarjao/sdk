@@ -5,7 +5,7 @@ _JAVA_VERSION="$1"
 _JAVA_HOME="$2"
 _TMP_DIR="${_SDK_HOME}/var/tmp"
 _JAVA_DOWNLOAD_URL=$(echo "${_JAVA_VERSION}" | sed -e 's|\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\_\([0-9]*\)\-\(.*\)|http://download.oracle.com/otn-pub/java/jdk/\2u\4-\5/server-jre-\2u\4-linux-x64.tar.gz|')
-_JAVA_CACHE_FILE=$(echo "${_JAVA_VERSION}" | sed -e "s|\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\_\([0-9]*\)\-\(.*\)|${_SDK_HOME}/var/tmp/server-jre-\2u\4-linux-x64.tar.gz|")
+_JAVA_CACHE_FILE=$(echo "${_JAVA_VERSION}" | sed -e "s|\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\_\([0-9]*\)\-\(.*\)|${_TMP_DIR}/server-jre-\2u\4-linux-x64.tar.gz|")
 _CURL_PROXY_REQUIRED=0
 _CURL_ARGS='--insecure --location'
 
@@ -18,6 +18,7 @@ fi
 
 if [ ! -e "$_JAVA_CACHE_FILE" ]; then
   echo "Downloading '${_JAVA_DOWNLOAD_URL}'"
+  mkdir -p "${_TMP_DIR}"
   curl ${_CURL_ARGS} -H "Cookie: oraclelicense=accept-securebackup-cookie" -o "$_JAVA_CACHE_FILE" "$_JAVA_DOWNLOAD_URL" 1>/dev/null 2>&1
 fi
 if [ ! -e "$_JAVA_HOME" ]; then
