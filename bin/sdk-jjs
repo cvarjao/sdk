@@ -1,0 +1,8 @@
+#!/bin/bash -e
+_THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+_SDK_HOME=$(cd "${_THIS_SCRIPT_DIR}" && cd .. && pwd)
+_SDK_JAVA_HOME="${_SDK_HOME}/var/.jre-linux"
+${_SDK_HOME}/lib/sdk-pkg-install.sh
+
+#set -x
+${_SDK_JAVA_HOME}/bin/jjs "$@"
