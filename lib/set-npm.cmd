@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 :SetVersion
 IF DEFINED NPM_VERSION GOTO SetHome

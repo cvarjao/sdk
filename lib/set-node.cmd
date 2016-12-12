@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 :SetVersion
 IF DEFINED NODE_VERSION GOTO SetHome
