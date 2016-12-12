@@ -1,14 +1,31 @@
-@echo off
-call "%~dp0set-javahome.cmd"
-IF NOT DEFINED SDK_NODE_CMD GOTO SetHome
+@echo on
 
-GOTO Done
+:SetVersion
+IF DEFINED NODE_VERSION GOTO SetHome
+IF EXIST %SDK_HOME%\usr\lib\nodejs.version.txt GOTO SetUserVersion
+IF EXIST %SDK_HOME%\etc\defaults\nodejs.version.txt GOTO SetDefaultVersion
+
+:SetDefaultVersion
+set /p NODE_VERSION=<%SDK_HOME%\etc\defaults\nodejs.version.txt
+GOTO SetHome
+
+:SetUserVersion
+set /p NODE_VERSION=<%SDK_HOME%\usr\lib\nodejs.version.txt
+GOTO SetHome
 
 :SetHome
-  call "%~dp0set-javahome.cmd"
-  for /f "tokens=*" %%i in ('jjs -scripting %SDK_HOME%\lib\install-node.js') do set "SDK_NODE_HOME=%%i"
-  set "PATH=%SDK_NODE_HOME%\bin;%PATH%"
-  set "SDK_NODE_CMD=%SDK_NODE_HOME%\bin\node.exe"
-  GOTO:eof
+set "SDK_NODE_HOME=%SDK_HOME%\usr\lib\node\%NODE_VERSION%"
+
+IF EXIST %SDK_NODE_HOME% GOTO SetPath
+
+:Install
+call "%~dp0sdk-pkg-install.cmd" "node" "%NODE_VERSION%" "%SDK_NODE_HOME%"
+
+:SetPath
+set "SDK_NODE_CMD=%SDK_NODE_HOME%\bin\node.exe"
+
+:FixPath
+set "SDK_NODE_CMD=%SDK_NODE_HOME%\bin\node.exe"
 
 :Done
+
